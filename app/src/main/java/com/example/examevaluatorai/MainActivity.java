@@ -1,6 +1,5 @@
 package com.example.examevaluatorai;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -8,6 +7,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_PICK = 100;
     Button btnUploadImage, btnExit;
+    EditText editReference;
+    String expectedText = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +36,27 @@ public class MainActivity extends AppCompatActivity {
 
         btnUploadImage = findViewById(R.id.btnUploadImage);
         btnExit = findViewById(R.id.btnExit);
+        editReference = findViewById(R.id.editReference);
+        Button btnConfirm = findViewById(R.id.btnConfirm);
+
+        btnUploadImage.setEnabled(false); // Başta devre dışı
+
+        btnConfirm.setOnClickListener(v -> {
+            expectedText = editReference.getText().toString().trim();
+            if (expectedText.isEmpty()) {
+                Toast.makeText(this, "Beklenen cevap boş olamaz", Toast.LENGTH_SHORT).show();
+            } else {
+                btnUploadImage.setEnabled(true);
+                Toast.makeText(this, "Cevap onaylandı. Şimdi görseli seçebilirsiniz.", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         btnUploadImage.setOnClickListener(v -> {
+            if (expectedText == null || expectedText.isEmpty()) {
+                Toast.makeText(this, "Lütfen beklenen cevabı onaylayın", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(intent, REQUEST_IMAGE_PICK);
         });
@@ -54,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             Uri selectedImageUri = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
-                sendImageToServer(bitmap);  // OCR'a gönder
+                sendImageToServer(bitmap, expectedText);  // OCR'a ve referansla birlikte gönder
             } catch (IOException e) {
                 e.printStackTrace();
                 Toast.makeText(this, "Resim alınamadı", Toast.LENGTH_SHORT).show();
@@ -69,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         return Base64.encodeToString(imageBytes, Base64.DEFAULT);
     }
 
-    private void sendImageToServer(Bitmap bitmap) {
+    private void sendImageToServer(Bitmap bitmap, String expectedText) {
         String url = "http://10.0.2.2:5000/predict";
 
         String base64Image = bitmapToBase64(bitmap);
@@ -89,13 +110,11 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         String result = response.getString("text");
 
-                        // 🔔 ALERTDIALOG İLE GÖSTER
-                        new AlertDialog.Builder(this)
-                                .setTitle("OCR Sonucu")
-                                .setMessage(result)
-                                .setPositiveButton("Tamam", (dialog, which) -> dialog.dismiss())
-                                .setCancelable(false)
-                                .show();
+                        // 🔁 OCR sonucu ve beklenen cevabı yeni ekrana gönder
+                        Intent intent = new Intent(this, ResultActivity.class);
+                        intent.putExtra("ocr_result", result);
+                        intent.putExtra("expected_text", expectedText);
+                        startActivity(intent);
 
                     } catch (Exception e) {
                         e.printStackTrace();
