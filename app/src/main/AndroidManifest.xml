@@ -6,6 +6,9 @@
     <uses-permission android:name="android.permission.INTERNET" /> <!-- Galeriden dosya seçmek için -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- Android 13+ için -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
+
 
     <application
         android:allowBackup="true"
@@ -17,8 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ExamEvaluatorAI"
         android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="true"
         tools:targetApi="31">
-        <activity
+    <activity
             android:name=".ResultActivity"
             android:exported="false" />
 
@@ -34,9 +38,8 @@
         </activity> <!-- OCR sonrası ekran -->
         <activity
             android:name=".MainActivity"
-            android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.ExamEvaluatorAI" />
+        <activity android:name=".RegisterActivity" />
     </application>
 
 </manifest>

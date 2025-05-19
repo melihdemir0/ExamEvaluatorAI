@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Devre dışı (disabled) -->
+    <item android:state_enabled="false" >
+        <shape android:shape="rectangle">
+            <solid android:color="#B0B0B0" /> <!-- Gri ton -->
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+
+    <!-- Aktif (enabled) -->
+    <item android:state_enabled="true" >
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#f9c449"
+                android:endColor="#bc41ef"
+                android:angle="45"/>
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+
+</selector>

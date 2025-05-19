@@ -1,0 +1,18 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Göz dış çerçevesi -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FF000000"
+        android:strokeWidth="2"
+        android:pathData="M1,12c2.5,-5 8.5,-8 12,-8s9.5,3 12,8c-2.5,5 -8.5,8 -12,8s-9.5,-3 -12,-8z" />
+
+    <!-- Göz bebeği -->
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M12,9c-1.66,0 -3,1.34 -3,3s1.34,3 3,3 3,-1.34 3,-3 -1.34,-3 -3,-3z" />
+</vector>

@@ -12,10 +12,14 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
+
 public class ResultActivity extends AppCompatActivity {
 
     TextView textOCR, textSimilarity;
     Button btnBack;
+
+    // NGROK URL'i buraya ekle
+    private static final String NGROK_URL = "https://2695-81-213-45-228.ngrok-free.app";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +28,8 @@ public class ResultActivity extends AppCompatActivity {
 
         textOCR = findViewById(R.id.textOCR);
         textSimilarity = findViewById(R.id.textSimilarity);
-        btnBack = findViewById(R.id.btnBack);  // 🆕 Geri dön butonu
+        btnBack = findViewById(R.id.btnBack);
 
-        // 🔙 Butona tıklanınca aktiviteyi kapat
         btnBack.setOnClickListener(v -> finish());
 
         String ocrResult = getIntent().getStringExtra("ocr_result");
@@ -44,7 +47,7 @@ public class ResultActivity extends AppCompatActivity {
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
-                "http://10.0.2.2:5000/grade",
+                NGROK_URL + "/grade",
                 body,
                 response -> {
                     try {

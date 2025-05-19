@@ -1,0 +1,11 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <gradient
+        android:angle="45"
+        android:startColor="#f9c449"
+        android:endColor="#bc41ef"
+        android:type="linear" />
+
+    <corners android:radius="30dp" /> <!-- Opsiyonel: buton köşelerini yuvarlatır -->
+</shape>
